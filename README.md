@@ -3,7 +3,7 @@
 [Python3 实现火车票查询工具](https://www.shiyanlou.com/courses/623)
 实验中写的代码
 
-用的语言是Python2而不是原来的Python3
+用的语言是Python2而不是原来的Python3，另外改进了一些功能并修补了一些漏洞
 
 运行在 gbk 编码的命令行中，win10 的 cmd 亲测成功
 
