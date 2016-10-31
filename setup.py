@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='tickets',
-    version = '0.1',
+    version = '0.2',
     description = 'Get tickets info via 12306',
     author = 'aweight',
     py_modules=['tickets', 'stations'],

@@ -106,16 +106,28 @@ def cli():
     from_station = stations.get(arguments['<from>'].decode('gbk'))
     to_station = stations.get(arguments['<to>'].decode('gbk'))
     date = arguments['<date>']
+    # 输入城市判断
+    if not from_station:
+        print "Can't find city: " + arguments['<from>'].decode('gbk').encode('utf-8') + "!"
+        return
+    if not to_station:
+        print "Can't find city: " + arguments['<to>'].decode('gbk').encode('utf-8') + "!"
+        return
 
     # 从12306获取数据
     url = 'https://kyfw.12306.cn/otn/lcxxcx/query?purpose_codes=ADULT&queryDate={}&from_station={}&to_station={}'.format(date, from_station, to_station)
     http = urllib3.PoolManager()
     urllib3.disable_warnings() # 尝试去掉没有https证书的warning失败，只好去掉了所有warning
     response = http.request('GET', url)
-    if response.status != 200:
+    if response.status != 200 or response.data == '-1':
         print 'Download data false!'
         return
-    available_trains = json.loads(response.data)['data']['datas']
+    data = json.loads(response.data)
+    # 返回结果判断
+    if not data['data']['flag']:
+        print data['data']['message'].encode('utf-8')
+        return
+    available_trains = data['data']['datas']
 
     # 获取参数
     options = ''.join([
