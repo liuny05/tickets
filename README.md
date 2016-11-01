@@ -1,4 +1,4 @@
-# tickets_12306
+# tickets
 这是我在实验楼的
 [Python3 实现火车票查询工具](https://www.shiyanlou.com/courses/623)
 实验中写的代码
