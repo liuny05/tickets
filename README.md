@@ -17,9 +17,9 @@ tickets [-gdtkz] <from> <to> <date>
 
 其中`[-gdtkz]`代表火车类型
 
-示例如下图
+效果如下图
 
-![着色的中文出现乱码](https://dn-simplecloud.shiyanlou.com/uid/229254/1477925956364.png-wm)
+![最终效果](https://dn-simplecloud.shiyanlou.com/uid/9db2fd51abe7de1fbd1ceffc43ef0e22/1478012985150.png-wm)
 
 
 ##用法
@@ -57,12 +57,5 @@ python tickets.py [-gdtkz] <from> <to> <date>
 ```
 chcp 65001
 ```
-
-##问题
-
-在添加了命令行着色功能后，着色中文的显示出现乱码，如第一幅图所示
-
-由于我对命令行的着色方式不甚了解，因此这个问题尚未解决
-
 
 ###关于本项目及对应课程的更多内容，可参见[我的实验报告](https://www.shiyanlou.com/courses/reports/1247705)
