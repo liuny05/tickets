@@ -24,7 +24,7 @@ from docopt import docopt
 import urllib3
 import json
 from prettytable import PrettyTable
-from colorama import init, Fore
+from colorama import init, Fore, Style
 
 init()
 
@@ -62,6 +62,15 @@ class TrainsCollection(object):
         else:
             return raw_train.get('controlled_train_message')
 
+    # win10 cmd 中进行中文着色时，结束符Fore.RESET会使命令行显示时“吃掉”末尾的中文字符
+    # 被“吃掉”的字符数为字符串长度的一半，因此补上相同长度的空字符即可
+    # 当然不一定要空字符，直接输出两份原字符也是可以的~
+    def _get_none(self, text):
+        ascii_none = ''
+        for x in xrange(len(text)):
+            ascii_none = ascii_none + '\x00'
+        return ascii_none
+
     def _get_time(self, raw_train):
         if raw_train.get('controlled_train_flag') == '0':
             return [Fore.GREEN + raw_train['start_time'] + Fore.RESET, Fore.RED + raw_train['arrive_time'] + Fore.RESET]
@@ -81,11 +90,10 @@ class TrainsCollection(object):
                     # 但是命令行却不知道这是一个BOM...因此会显示为乱码���
                     # 鉴于这是比较底层的东西不好修改，被迫在字符串开头加上两个ascii码'\x00\x08'，意思为'空字符''退格'
                     # 这样从显示效果来看就跟乱码前没有区别了~
-                    # 然而在我电脑的命令行里不知为何，明明可以从显示结果里复制出'广州'两个字，但'州'字却不显示出来 :(
-                    # 要跪了...
+                    # 另外进行中文着色时一半字符会被“吃掉”，见_get_none()函数注释
                     '\n'.join(
-                        [Fore.GREEN + '\x00\x08' + raw_train['from_station_name'] + Fore.RESET,
-                         Fore.RED + '\x00\x08' + raw_train['to_station_name'] + Fore.RESET]),
+                        [Fore.GREEN + '\x00\x08' + raw_train['from_station_name'] + self._get_none(raw_train['from_station_name']) + Fore.RESET,
+                         Fore.RED + '\x00\x08' + raw_train['to_station_name'] + self._get_none(raw_train['to_station_name']) + Fore.RESET]),
                     '\n'.join(self._get_time(raw_train)),
                     self._get_duration(raw_train),
                     raw_train['zy_num'],
