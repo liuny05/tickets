@@ -77,9 +77,15 @@ class TrainsCollection(object):
                 # 貌似在括号内的内容换行是不会有影响的，可以换行以使代码更美观
                 train = [
                     train_no,
+                    # win10的cmd命令行，或者是python的print函数本身？会将中文字符串的第一个字符替换成3个标识字符编码为utf-8格式的BOM'\xef\xbf\xbd'
+                    # 但是命令行却不知道这是一个BOM...因此会显示为乱码���
+                    # 鉴于这是比较底层的东西不好修改，被迫在字符串开头加上两个ascii码'\x00\x08'，意思为'空字符''退格'
+                    # 这样从显示效果来看就跟乱码前没有区别了~
+                    # 然而在我电脑的命令行里不知为何，明明可以从显示结果里复制出'广州'两个字，但'州'字却不显示出来 :(
+                    # 要跪了...
                     '\n'.join(
-                        [Fore.GREEN + raw_train['from_station_name'] + Fore.RESET,
-                         Fore.RED + raw_train['to_station_name'] + Fore.RESET]),
+                        [Fore.GREEN + '\x00\x08' + raw_train['from_station_name'] + Fore.RESET,
+                         Fore.RED + '\x00\x08' + raw_train['to_station_name'] + Fore.RESET]),
                     '\n'.join(self._get_time(raw_train)),
                     self._get_duration(raw_train),
                     raw_train['zy_num'],
